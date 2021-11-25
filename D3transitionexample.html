@@ -1,22 +1,147 @@
 <!DOCTYPE html>
 <html>
-<head>
+  <head>
     <meta charset="UTF-8" />
     <title>D3 Transitions</title>
     <script src="https://d3js.org/d3.v5.min.js"></script>
     <style>
+      .svgContainer {
+        border-color: black;
+        border-style: solid;
+        border-width: 1px;
+      }
+    </style>
+  </head>
 
- 	</style>
-</head>
+  <body>
+    <!-- Change button IDs to change transition/reset (1-7)-->
+    <button id="start7">Transition</button>
+    <button id="reset7">Reset</button>
+    <div id="main"></div>
+    <script type="text/javascript">
+      const width = 350;
+      const height = 175;
 
-<body>
+      const rectX = 50;
+      const rectY = 50;
 
-	<div id="main">
+      const svgContainer = d3
+        .select('div#main')
+        .append('svg')
+        .attr('width', width)
+        .attr('height', height)
+        .attr('class', 'svgContainer');
 
-	</div>
-<script type="text/javascript">
+      const rectangle = svgContainer
+        .append('rect')
+        .attr('x', rectX)
+        .attr('y', rectY)
+        .attr('width', 50)
+        .attr('height', 50);
 
+      // Simple transition, move X position
+      d3.select('#start').on('click', () => {
+        rectangle.transition().attr('x', 250);
+      });
+      d3.select('#reset').on('click', () => {
+        rectangle.transition().attr('x', rectX).attr('y', rectY);
+      });
 
-</script>
-</body>
+      // Move X position and change opacity
+      d3.select('#start2').on('click', () => {
+        rectangle.transition().attr('x', 250).attr('opacity', 0.5);
+      });
+      d3.select('#reset2').on('click', () => {
+        rectangle
+          .transition()
+          .attr('x', rectX)
+          .attr('y', rectY)
+          .attr('opacity', 1);
+      });
+
+      // Additionally change color
+      d3.select('#start3').on('click', () => {
+        rectangle
+          .transition()
+          .attr('x', 250)
+          .attr('opacity', 0.5)
+          .attr('fill', 'blue');
+      });
+      d3.select('#reset3').on('click', () => {
+        rectangle
+          .transition()
+          .attr('x', rectX)
+          .attr('y', rectY)
+          .attr('opacity', 1)
+          .attr('fill', 'green');
+      });
+
+      // Transition includes new color, decreased opacity, different X
+      // position, different dimensions, and an increased delay
+      d3.select('#start4').on('click', () => {
+        rectangle
+          .transition()
+          .attr('fill', 'red')
+          .attr('opacity', 0.5)
+          .attr('width', 100)
+          .attr('height', 100)
+          .attr('x', 250)
+          .delay(100);
+      });
+      d3.select('#reset4').on('click', () => {
+        rectangle
+          .transition()
+          .attr('fill', 'black')
+          .attr('opacity', 1)
+          .attr('width', width)
+          .attr('height', height)
+          .attr('x', rectX);
+      });
+
+      // Simple transition but with a long delay (2.5 seconds)
+      d3.select('#start5').on('click', () => {
+        rectangle.transition().attr('x', 250).duration(2500);
+      });
+      d3.select('#reset5').on('click', () => {
+        rectangle.transition().attr('x', rectX).duration(2500);
+      });
+
+      // Simple transition but with "ease bounce" transition
+      d3.select('#start6').on('click', () => {
+        rectangle.transition().attr('x', 250).ease(d3.easeExp);
+      });
+      d3.select('#reset6').on('click', () => {
+        rectangle.transition().attr('x', rectX).ease(d3.easeExp);
+      });
+
+      // Two transitions
+      d3.select('#start7').on('click', () => {
+        rectangle
+          .transition()
+          .attr('x', 250)
+          .attr('width', 100)
+          .attr('height', 100)
+          .attr('opacity', 0.5)
+          .attr('fill', 'red')
+          .delay(500)
+          .duration(2500)
+          .ease(d3.easeBounce)
+          .on('end', function () {
+            d3.select(this)
+              .transition()
+              .attr('x', 150)
+              .attr('width', 75)
+              .attr('height', 75)
+              .attr('opacity', 0.75)
+              .attr('fill', 'blue')
+              .delay(500)
+              .duration(2500)
+              .ease(d3.easeBounce);
+          });
+      });
+      d3.select('#reset7').on('click', function () {
+        rectangle.transition().attr('x', rectX).attr('y', rectY);
+      });
+    </script>
+  </body>
 </html>
